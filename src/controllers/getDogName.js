@@ -1,16 +1,11 @@
 const { Dog } = require("../DB/db");
-// const axios = require("axios"); // Only If using API
+const axios = require("axios");
 
-//* TO ASK
-//! IMPORTANT:
-// When refering to "it must work for API dogs so for DB dogs" means It may
-// have the option to look on the API If needed, or that It NEEDS to search on one,
-// and then on the other.
-//? IF SO: Should It repeat? If already found on DB - Should It look on API? (viceversa)
-//? Which first?
+// Made It so If no data found on DB, search on API.
 
 async function getDogName(req, res) {
   try {
+    //! Question
     //* TO ASK:
     // For this to receive by query the URL needs to be ?name=..., but required
     // on readme was  /dogs/name?="...", so I filter the breed needed by URL.
@@ -30,15 +25,14 @@ async function getDogName(req, res) {
 
     //? Using DB
 
-    const result = await Dog.findOne({ where: { name: nameToMatch } });
+    let result = await Dog.findOne({ where: { name: nameToMatch } });
     if (result) res.json(result);
-    else res.status(404).json({ error: "Dog not found" });
-
-    //? Using API
-
-    // const { data } = await axios.get("https://api.thedogapi.com/v1/breeds");
-    // const result = data.filter((dog) => dog.name == nameToMatch);
-    // res.json(result);
+    else {
+      const { data } = await axios.get("https://api.thedogapi.com/v1/breeds");
+      result = data.filter((dog) => dog.name == nameToMatch);
+      if (result.length) res.json(result[0]);
+      else res.status(404).json({ error: "Dog not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

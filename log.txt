@@ -1,6 +1,0 @@
-Oct 8: 
-
-- BackEnd 90% If Dog query route and breed route have to go to API as an option, non as a must. In case they should go both, Backend 70%.
-- Testing on Database (Models and validations) 100%
-- Testing on server (Routes) 50%
-- Questions: yes, on /src/controllers/getDogsName

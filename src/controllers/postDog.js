@@ -4,7 +4,7 @@ async function postDog(req, res) {
   try {
     const { id, name, height, weight, life_span, image, temperament } =
       req.body;
-    if (id && name && height && weight && life_span && image) {
+    if (id && name && height && weight && life_span && image && temperament) {
       // Array destructuring as findOrCreate returns an array
       const [result] = await Dog.findOrCreate({
         where: {

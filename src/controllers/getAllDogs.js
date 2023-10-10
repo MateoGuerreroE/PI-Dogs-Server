@@ -1,8 +1,15 @@
+require("dotenv").config();
 const { Dog, Attitude } = require("../DB/db");
+const axios = require("axios");
+const { API_KEY } = process.env;
 
 async function getAllDogs(req, res) {
   try {
-    const result = await Dog.findAll({ include: Attitude });
+    const result1 = await Dog.findAll({ include: Attitude });
+    const { data } = await axios.get(
+      `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
+    );
+    let result = [...result1, ...data];
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });

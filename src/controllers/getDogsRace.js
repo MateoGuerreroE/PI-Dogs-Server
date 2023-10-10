@@ -1,5 +1,5 @@
 const { Dog } = require("../DB/db");
-// const axios = require("axios"); // ONLY If using API
+const axios = require("axios");
 
 async function getDogsRace(req, res) {
   const { idRaza } = req.params;
@@ -7,12 +7,14 @@ async function getDogsRace(req, res) {
     //? FOR DB
     const results = await Dog.findOne({ where: { id: idRaza } });
     if (results) res.json(results);
-    else res.status(404).json({ error: "Dog breed not found" });
+    else {
+      const { data } = await axios.get(
+        `https://api.thedogapi.com/v1/breeds/${idRaza}`
+      );
+      if (data.name) res.json(data);
+      else res.status(404).json({ error: "Dog breed not found" });
+    }
     //? FOR API
-    // const { data } = await axios.get(
-    //   `https://api.thedogapi.com/v1/breeds/${idRaza}`
-    // );
-    // res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
