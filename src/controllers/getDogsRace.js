@@ -1,5 +1,7 @@
+require("dotenv").config();
 const { Dog } = require("../DB/db");
 const axios = require("axios");
+const { API_KEY } = process.env;
 
 async function getDogsRace(req, res) {
   const { idRaza } = req.params;
@@ -9,7 +11,7 @@ async function getDogsRace(req, res) {
     if (results) res.json(results);
     else {
       const { data } = await axios.get(
-        `https://api.thedogapi.com/v1/breeds/${idRaza}`
+        `https://api.thedogapi.com/v1/breeds/${idRaza}?api_key=${API_KEY}`
       );
       if (data.name) res.json(data);
       else res.status(404).json({ error: "Dog breed not found" });

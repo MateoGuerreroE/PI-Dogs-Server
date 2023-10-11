@@ -1,10 +1,13 @@
+require("dotenv").config();
 const { Dog } = require("../DB/db");
 const axios = require("axios");
+const { API_KEY } = process.env;
 
 // Made It so If no data found on DB, search on API.
 
 async function getDogName(req, res) {
   try {
+    console.log(req.query);
     //! Question
     //* TO ASK:
     // For this to receive by query the URL needs to be ?name=..., but required
@@ -28,7 +31,9 @@ async function getDogName(req, res) {
     let result = await Dog.findOne({ where: { name: nameToMatch } });
     if (result) res.json(result);
     else {
-      const { data } = await axios.get("https://api.thedogapi.com/v1/breeds");
+      const { data } = await axios.get(
+        `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
+      );
       result = data.filter((dog) => dog.name == nameToMatch);
       if (result.length) res.json(result[0]);
       else res.status(404).json({ error: "Dog not found" });
