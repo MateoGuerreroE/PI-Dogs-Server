@@ -7,7 +7,6 @@ const { API_KEY } = process.env;
 
 async function getDogName(req, res) {
   try {
-    console.log(req.query);
     //! Question
     //* TO ASK:
     // For this to receive by query the URL needs to be ?name=..., but required

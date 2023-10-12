@@ -11,9 +11,10 @@ async function getDogsRace(req, res) {
     if (results) res.json(results);
     else {
       const { data } = await axios.get(
-        `https://api.thedogapi.com/v1/breeds/${idRaza}?api_key=${API_KEY}`
+        `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
       );
-      if (data.name) res.json(data);
+      const result = data.find((dog) => dog.id == idRaza);
+      if (result.name) res.json(result);
       else res.status(404).json({ error: "Dog breed not found" });
     }
     //? FOR API

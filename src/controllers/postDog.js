@@ -36,8 +36,8 @@ async function postDog(req, res) {
       // on the DB, If so, relate each new record with attitudes on inter table
       if (result._options.isNewRecord) await result.addAttitudes(newArr);
 
-      // Can return anything //! Returning now: all info on Dogs
-      res.json(await Dog.findAll());
+      // Can return anything //! Returning now: Message of successful posting
+      res.json({ message: "Successfully added dog" });
     } else res.status(400).json({ error: "Faltan parametros" });
   } catch (error) {
     res.status(500).json({ error: error.message });
