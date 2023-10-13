@@ -35,7 +35,7 @@ async function getDogName(req, res) {
       );
       result = data.filter((dog) => dog.name == nameToMatch);
       if (result.length) res.json(result[0]);
-      else res.status(404).json({ error: "Dog not found" });
+      else res.status(404).json({ error: "Breed name not found" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

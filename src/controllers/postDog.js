@@ -2,14 +2,15 @@ const { Dog, Attitude } = require("../DB/db");
 
 async function postDog(req, res) {
   try {
-    const { id, name, height, weight, life_span, image, temperament } =
-      req.body;
-    if (id && name && height && weight && life_span && image && temperament) {
+    const { name, height, weight, life_span, image, temperament } = req.body;
+    if (name && height && weight && life_span && image && temperament) {
+      // This will convert name to Name format. //! MISSING LOGIC WHEN NAME IS TWO OR SEVERAL WORDS.
+      let fixedName = name.toLowerCase();
+      fixedName = fixedName.charAt(0).toUpperCase() + fixedName.slice(1);
       // Array destructuring as findOrCreate returns an array
       const [result] = await Dog.findOrCreate({
         where: {
-          id: id,
-          name: name,
+          name: fixedName,
           height: height.metric,
           weight: weight.metric,
           life_span: life_span,

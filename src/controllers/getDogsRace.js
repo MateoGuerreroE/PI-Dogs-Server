@@ -7,14 +7,17 @@ async function getDogsRace(req, res) {
   const { idRaza } = req.params;
   try {
     //? FOR DB
-    const results = await Dog.findOne({ where: { id: idRaza } });
+    let results = null;
+    if (idRaza.includes("-")) {
+      results = await Dog.findOne({ where: { id: idRaza } });
+    }
     if (results) res.json(results);
     else {
       const { data } = await axios.get(
         `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
       );
       const result = data.find((dog) => dog.id == idRaza);
-      if (result.name) res.json(result);
+      if (result) res.json(result);
       else res.status(404).json({ error: "Dog breed not found" });
     }
     //? FOR API
