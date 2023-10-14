@@ -4,9 +4,16 @@ async function postDog(req, res) {
   try {
     const { name, height, weight, life_span, image, temperament } = req.body;
     if (name && height && weight && life_span && image && temperament) {
-      // This will convert name to Name format. //! MISSING LOGIC WHEN NAME IS TWO OR SEVERAL WORDS.
-      let fixedName = name.toLowerCase();
-      fixedName = fixedName.charAt(0).toUpperCase() + fixedName.slice(1);
+      // This will convert name to Name format.
+      let fixedName = name
+        .toLowerCase()
+        .split(" ")
+        .map((word) => {
+          let result = word.charAt(0).toUpperCase() + word.slice(1);
+          return result;
+        })
+        .join(" ");
+      // fixedName = fixedName.charAt(0).toUpperCase() + fixedName.slice(1);
       // Array destructuring as findOrCreate returns an array
       const [result] = await Dog.findOrCreate({
         where: {

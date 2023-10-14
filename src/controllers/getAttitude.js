@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { Attitude } = require("../DB/db");
 const axios = require("axios");
-const { attitudeValidator } = require("../handlers");
+const { attitudeValidator } = require("../helpers");
 const { API_KEY } = process.env;
 
 async function getAttitude(req, res) {

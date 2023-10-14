@@ -5,7 +5,14 @@ const { API_KEY } = process.env;
 
 async function getAllDogs(req, res) {
   try {
-    const result1 = await Dog.findAll({ include: Attitude });
+    const result1 = await Dog.findAll({
+      include: [
+        {
+          model: Attitude,
+          attributes: ["name", "id"],
+        },
+      ],
+    });
     const { data } = await axios.get(
       `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
     );
