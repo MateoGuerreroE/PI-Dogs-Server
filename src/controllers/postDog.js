@@ -18,10 +18,10 @@ async function postDog(req, res) {
       const [result] = await Dog.findOrCreate({
         where: {
           name: fixedName,
-          height: height.metric,
-          weight: weight.metric,
+          height: height,
+          weight: weight,
           life_span: life_span,
-          image: image.url,
+          image: image,
         },
       });
 

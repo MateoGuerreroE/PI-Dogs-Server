@@ -4,7 +4,7 @@ const { BACKEND_PORT } = process.env;
 const { sequelize } = require("./DB/db");
 const axios = require("axios");
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   server.listen(BACKEND_PORT, () => {
     console.log("Server mounted on port: " + BACKEND_PORT);
     axios
