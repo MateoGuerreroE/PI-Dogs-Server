@@ -5,7 +5,7 @@ const { API_KEY } = process.env;
 
 async function getAllDogs(req, res) {
   try {
-    const result1 = await Dog.findAll({
+    const rawResult = await Dog.findAll({
       include: [
         {
           model: Attitude,
@@ -13,10 +13,36 @@ async function getAllDogs(req, res) {
         },
       ],
     });
+    let result1 = rawResult.map((breed) => {
+      const temperament = breed.Attitudes.map((att) => att.name);
+      return {
+        id: breed.id,
+        name: breed.name,
+        height: breed.height,
+        weight: breed.weight,
+        life_span: breed.life_span,
+        image: breed.image,
+        temperament: temperament,
+        created: breed.created,
+      }; // HELPER HERE.
+    });
+
     const { data } = await axios.get(
       `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
     );
-    let result = [...result1, ...data];
+    let result2 = data.map((breed) => {
+      return {
+        id: breed.id,
+        name: breed.name,
+        height: breed.height.metric,
+        weight: breed.weight.metric,
+        life_span: breed.life_span,
+        image: breed.image.url,
+        temperament: breed.temperament ? breed.temperament.split(", ") : [],
+        created: false,
+      };
+    });
+    let result = [...result1.reverse(), ...result2];
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });

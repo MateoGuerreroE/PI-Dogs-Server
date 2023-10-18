@@ -1,3 +1,5 @@
+const apiDataConverter = require("./apiDataConverter");
 const attitudeValidator = require("./attitudeRecurs");
+const camelCasing = require("./camelCasing");
 
-module.exports = { attitudeValidator };
+module.exports = { attitudeValidator, camelCasing, apiDataConverter };

@@ -1,19 +1,12 @@
 const { Dog, Attitude } = require("../DB/db");
+const { camelCasing } = require("../helpers");
 
 async function postDog(req, res) {
   try {
     const { name, height, weight, life_span, image, temperament } = req.body;
     if (name && height && weight && life_span && image && temperament) {
-      // This will convert name to Name format.
-      let fixedName = name
-        .toLowerCase()
-        .split(" ")
-        .map((word) => {
-          let result = word.charAt(0).toUpperCase() + word.slice(1);
-          return result;
-        })
-        .join(" ");
-      // fixedName = fixedName.charAt(0).toUpperCase() + fixedName.slice(1);
+      let fixedName = camelCasing(name); // Converting name to Camel Casing.
+
       // Array destructuring as findOrCreate returns an array
       const [result] = await Dog.findOrCreate({
         where: {
@@ -25,16 +18,13 @@ async function postDog(req, res) {
         },
       });
 
-      // Set string of temperament as an array
-      let temperamentList = temperament.split(", ");
-
       // Convert each temperament name into its ID in a new array.
       // No map using as this needs to be in order and await inside map throws error
 
       let newArr = [];
-      for (let i = 0; i < temperamentList.length; i++) {
+      for (let i = 0; i < temperament.length; i++) {
         const matchedTemp = await Attitude.findOne({
-          where: { name: temperamentList[i] },
+          where: { name: temperament[i] },
         });
         if (matchedTemp) {
           newArr.push(matchedTemp.id);
