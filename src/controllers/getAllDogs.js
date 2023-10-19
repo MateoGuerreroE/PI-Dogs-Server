@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Dog, Attitude } = require("../DB/db");
 const axios = require("axios");
+const apiDataConverter = require("../helpers/apiDataConverter");
 const { API_KEY } = process.env;
 
 async function getAllDogs(req, res) {
@@ -24,23 +25,14 @@ async function getAllDogs(req, res) {
         image: breed.image,
         temperament: temperament,
         created: breed.created,
-      }; // HELPER HERE.
+      };
     });
 
     const { data } = await axios.get(
       `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
     );
     let result2 = data.map((breed) => {
-      return {
-        id: breed.id,
-        name: breed.name,
-        height: breed.height.metric,
-        weight: breed.weight.metric,
-        life_span: breed.life_span,
-        image: breed.image.url,
-        temperament: breed.temperament ? breed.temperament.split(", ") : [],
-        created: false,
-      };
+      return apiDataConverter(breed);
     });
     let result = [...result1.reverse(), ...result2];
     res.json(result);
