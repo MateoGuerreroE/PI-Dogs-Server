@@ -4,28 +4,23 @@ const session = require("supertest");
 const agent = session(server);
 
 const sampleDog = {
-  weight: {
-    imperial: "75 - 110",
-    metric: "34 - 50",
-  },
-  height: {
-    imperial: "22 - 27",
-    metric: "56 - 69",
-  },
-  id: 500,
+  weight: "34 - 50",
+  height: "56 - 69",
   name: "Pinscher",
-  bred_for: "Cattle drover, guardian, draft",
-  breed_group: "Working",
   life_span: "8 - 10 years",
-  temperament:
-    "Steady, Good-natured, Fearless, Devoted, Alert, Obedient, Confident, Self-assured, Calm, Courageous",
-  reference_image_id: "r1xXEgcNX",
-  image: {
-    id: "r1xXEgcNX",
-    width: 736,
-    height: 595,
-    url: "https://cdn2.thedogapi.com/images/r1xXEgcNX.jpg",
-  },
+  temperament: [
+    "Steady",
+    "Good-natured",
+    "Fearless",
+    "Devoted",
+    "Alert",
+    "Obedient",
+    "Confident",
+    "Self-assured",
+    "Calm",
+    "Courageous",
+  ],
+  image: "https://cdn2.thedogapi.com/images/r1xXEgcNX.jpg",
 };
 
 describe("RUTAS TEMPERAMENTS", () => {
@@ -65,11 +60,27 @@ describe("ROUTAS DOGS", () => {
 
     test("POST /dogs debe asociar al Dog agregado los temperamentos como un array", async () => {
       const { dataValues } = await Dog.findOne({
-        where: { id: sampleDog.id },
+        where: { name: sampleDog.name },
         include: Attitude,
       });
       expect(dataValues.Attitudes.length).toBe(10);
-      expect(dataValues.Attitudes[0].name).toBe("Alert");
+      expect(dataValues.Attitudes[0].name).toBe("Steady");
+    });
+
+    test("POST /dogs debe crear en la base de datos un nuevo Dog con una propiedad create por defecto en true", async () => {
+      const { dataValues } = await Dog.findOne({
+        where: { name: sampleDog.name },
+      });
+      expect(dataValues.created).toBe(true);
+    });
+
+    test("POST /dogs, al postear un Dog, debe crear por defecto un id tipo UUID unico", async () => {
+      const { dataValues } = await Dog.findOne({
+        where: { name: sampleDog.name },
+      });
+      const validator =
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+      expect(validator.test(dataValues.id)).toBe(true);
     });
   });
   describe("Rutas GET", () => {
@@ -82,7 +93,7 @@ describe("ROUTAS DOGS", () => {
     test("GET /dogs debe retornar los dogs de la base de datos, y luego los de la API", async () => {
       await agent.post("/dogs").send(sampleDog);
       const result = await agent.get("/dogs");
-      expect(result._body[0].id).toEqual(sampleDog.id);
+      expect(result._body[0].name).toEqual(sampleDog.name);
       expect(result._body[1].id).toBe(1);
     });
 
@@ -90,7 +101,7 @@ describe("ROUTAS DOGS", () => {
       const result = await agent.get('/dogs/name?="Barbet"');
       expect(result._body.name).toBe("Barbet");
       expect(result._body.id).toBe(26);
-      expect(Object.keys(result._body).length).toBe(9);
+      expect(Object.keys(result._body).length).toBe(8);
       const result2 = await agent.get('/dogs/name?="Pepe"');
       expect(result2._body.error).toBeDefined();
     });
@@ -98,13 +109,14 @@ describe("ROUTAS DOGS", () => {
     test("GET /dogs/name?='...' debe traer un DOG de la base de datos si lo encuentra", async () => {
       const result = await agent.get('/dogs/name?="Pinscher"');
       expect(result._body.name).toBe("Pinscher");
-      expect(result._body.id).toBe(500);
+      expect(result._body.life_span).toBe("8 - 10 years");
     });
 
     test("GET /dogs/:id debe traer un DOG de la API o base de datos por su id", async () => {
       const result = await agent.get("/dogs/13");
       expect(result._body.name).toBe("American Eskimo Dog (Miniature)");
-      const result2 = await agent.get("/dogs/500");
+      const created = await Dog.findOne({ where: { name: "Pinscher" } });
+      const result2 = await agent.get(`/dogs/${created.id}`);
       expect(result2._body.name).toEqual(sampleDog.name);
     });
   });

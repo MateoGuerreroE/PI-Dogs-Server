@@ -29,9 +29,9 @@ describe("MODELOS", () => {
   const sampleDog = {
     id: 1,
     name: "Pepe",
-    height: "12",
-    weight: "12",
-    life_span: "12",
+    height: "12 - 13",
+    weight: "12 - 13",
+    life_span: "12 - 13 years",
     image: "sample.jpg",
   };
 
@@ -45,6 +45,7 @@ describe("MODELOS", () => {
     test("El modelo Dog tiene las propiedades adecuadas", async () => {
       const newDog = await Dog.build(sampleDog);
       const newDogkeys = [
+        "created",
         "id",
         "name",
         "height",
@@ -104,6 +105,21 @@ describe("MODELOS", () => {
         expect((await Attitude.findAll()).length).toBe(0);
         expect(error.message).toBe(
           "notNull Violation: Attitude.name cannot be null"
+        );
+      }
+    });
+    test("En caso de no recibir la informacion en el formato adecuado, debe retornar un error en la validacion de los modelos", async () => {
+      try {
+        const newDog = {
+          ...sampleDog,
+          name: "Pepito",
+          height: "12",
+        };
+        await Dog.create(newDog);
+      } catch (error) {
+        expect(await Dog.findOne({ where: { name: "Pepito" } })).toBeNull();
+        expect(error.message).toBe(
+          "Validation error: Validation is on height failed"
         );
       }
     });

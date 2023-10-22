@@ -7,26 +7,43 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isAlpha: true,
+      },
+      unique: true,
     },
     height: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        is: /^\d+\s*-\s*\d+$/,
+      },
     },
     weight: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        is: /^\d+\s*-\s*\d+$/,
+      },
     },
     life_span: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        is: /^\d+\s*-\s*\d+\s*years$/,
+      },
     },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isUrl: true,
+      },
     },
     created: {
       type: DataTypes.BOOLEAN,
