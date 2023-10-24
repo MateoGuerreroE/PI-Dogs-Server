@@ -1,11 +1,11 @@
 require("dotenv").config();
 const server = require("./server");
-const { BACKEND_PORT } = process.env;
 const { sequelize } = require("./DB/db");
 const axios = require("axios");
+const port = process.env.PORT || 3000;
 
 sequelize.sync({ force: false }).then(() => {
-  server.listen(BACKEND_PORT, () => {
+  server.listen(port, "0.0.0.0", () => {
     console.log("Server mounted on port: " + BACKEND_PORT);
     axios
       .get(`http://localhost:3001/temperaments`)
