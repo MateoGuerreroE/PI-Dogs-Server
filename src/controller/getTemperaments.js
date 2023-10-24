@@ -6,6 +6,11 @@ const { API_KEY } = process.env;
 
 async function getTemperaments() {
   try {
+    // This two lines will validate If attitudes already exist, so no double-posting on DB and also no need for axios
+    let current = await Attitude.findAll();
+    if (current.length)
+      return "Attitudes already added to DB, creation process stopped, you can continue.";
+
     const { data } = await axios.get(
       `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
     );
@@ -28,7 +33,7 @@ async function getTemperaments() {
     await Attitude.bulkCreate(attitudesAsObj);
     return "Successfully added to DataBase";
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }
 

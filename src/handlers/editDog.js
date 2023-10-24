@@ -1,11 +1,13 @@
 const { Dog } = require("../DB/db");
 const { validateUUID } = require("../helpers");
 
+//* No need of modularization, few code lines would be on the controller mod. (just 2)
+
 async function editDog(req, res) {
   const { id } = req.body;
   try {
-    if (validateUUID(id)) {
-      const [result] = await Dog.update(req.query, { where: { id: id } });
+    if (validateUUID(id)) { //*
+      const [result] = await Dog.update(req.query, { where: { id: id } }); //*
       if (result) {
         res.json({ message: "Successfully edited dog, click OK reload" });
       } else
