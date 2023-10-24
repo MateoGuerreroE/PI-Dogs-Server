@@ -1,4 +1,4 @@
-const { getAttitude, settingAttitudes } = require("../controllers");
+const { getAttitude, settingAttitudes } = require("../handlers");
 
 const attitudeRouter = require("express").Router();
 

@@ -5,7 +5,7 @@ const {
   postDog,
   deleteDog,
   editDog,
-} = require("../controllers");
+} = require("../handlers");
 
 const dogsRouter = require("express").Router();
 

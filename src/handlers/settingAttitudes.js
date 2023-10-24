@@ -1,5 +1,7 @@
 const { Attitude } = require("../DB/db");
 
+//* NOTE: No need of controller as really few code is implemented here
+
 async function settingAttitudes(req, res) {
   try {
     let attitudes = await Attitude.findAll();
