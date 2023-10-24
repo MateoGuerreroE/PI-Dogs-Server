@@ -33,12 +33,13 @@ async function postDog(req, res) {
       // Validates prop inside findOrCreate result which states If data is already
       // on the DB, If so, relate each new record with attitudes on inter table
       if (result._options.isNewRecord) await result.addAttitudes(newArr);
-
       // Can return anything //! Returning now: Message of successful posting
-      res.json({ message: "Successfully added dog" });
-    } else res.status(400).json({ error: "Faltan parametros" });
+      return res.json({
+        message: "Successfully added dog, click OK to return home",
+      });
+    } else return res.status(400).json({ message: "Missing information" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
 

@@ -32,7 +32,7 @@ async function getAttitude(req, res) {
     // This can return anything //! Returning now: Message of completition
     res.send("Successfully added to DataBase");
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(404).json({ message: error.message });
   }
 }
 

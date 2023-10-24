@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
+        is: /^[A-Za-z\s]*$/,
       },
       unique: true,
     },

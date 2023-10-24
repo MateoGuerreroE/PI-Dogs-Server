@@ -24,7 +24,7 @@ async function getAllDogs(req, res) {
         life_span: breed.life_span,
         image: breed.image,
         temperament: temperament,
-        created: breed.created,
+        created: true,
       };
     });
 
@@ -37,7 +37,7 @@ async function getAllDogs(req, res) {
     let result = [...result1.reverse(), ...result2];
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 

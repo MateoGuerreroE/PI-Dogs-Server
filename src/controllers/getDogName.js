@@ -20,10 +20,10 @@ async function getDogName(req, res) {
       if (result.length) {
         result = apiDataConverter(result[0]);
         res.json(result);
-      } else res.status(404).json({ error: "Breed name not found" });
+      } else res.status(404).json({ message: "Breed name not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 

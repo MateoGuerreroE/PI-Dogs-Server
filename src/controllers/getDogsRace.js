@@ -16,12 +16,13 @@ async function getDogsRace(req, res) {
         `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
       );
       results = data.find((dog) => dog.id == idRaza);
-      results = apiDataConverter(results);
+      if (results) {
+        results = apiDataConverter(results);
+      } else res.status(404).json({ message: "Breed ID not found" });
     }
-    if (results) res.json(results);
-    else res.status(404).json({ error: "Dog breed not found" });
+    res.json(results);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 
