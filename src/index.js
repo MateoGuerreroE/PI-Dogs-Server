@@ -8,7 +8,7 @@ sequelize.sync({ force: false }).then(() => {
   server.listen(port, "0.0.0.0", () => {
     console.log("Server mounted on port: " + port);
     axios
-      .get(`http://localhost:${port}/temperaments`)
+      .get(`https://pi-dogs-server-mg.up.railway.app/temperaments`)
       .catch((error) => console.log(error.response.data));
   });
 });
