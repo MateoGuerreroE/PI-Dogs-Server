@@ -8,7 +8,7 @@ sequelize.sync({ force: false }).then(() => {
   server.listen(port, "0.0.0.0", () => {
     console.log("Server mounted on port: " + port);
     axios
-      .get(`http://localhost:3001/temperaments`)
-      .catch((error) => console.log(error));
+      .get(`http://localhost:${port}/temperaments`)
+      .catch((error) => console.log(error.response.data));
   });
 });
