@@ -1,4 +1,5 @@
 const { Dog, Attitude } = require("../../DB/db");
+const { dbDataConverter } = require("../../helpers");
 
 async function getDBDogs() {
   try {
@@ -10,19 +11,7 @@ async function getDBDogs() {
         },
       ],
     });
-    let result = rawResult.map((breed) => {
-      const temperament = breed.Attitudes.map((att) => att.name);
-      return {
-        id: breed.id,
-        name: breed.name,
-        height: breed.height,
-        weight: breed.weight,
-        life_span: breed.life_span,
-        image: breed.image,
-        temperament: temperament,
-        created: true,
-      };
-    });
+    let result = rawResult.map((breed) => dbDataConverter(breed)); //! Added
 
     return result.reverse();
   } catch (error) {

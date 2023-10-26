@@ -6,8 +6,8 @@ const { validateUUID } = require("../helpers");
 async function editDog(req, res) {
   const { id } = req.body;
   try {
-    if (validateUUID(id)) { //*
-      const [result] = await Dog.update(req.query, { where: { id: id } }); //*
+    if (validateUUID(id)) {
+      const [result] = await Dog.update(req.query, { where: { id: id } });
       if (result) {
         res.json({ message: "Successfully edited dog, click OK reload" });
       } else
