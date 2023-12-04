@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 
 // Deploy
 
-const endpoint = "https://pi-dogs-server-mg.up.railway.app/temperaments";
+const endpoint = "https://pidogs-server.onrender.com/temperaments";
 
 sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, "0.0.0.0", () => {
